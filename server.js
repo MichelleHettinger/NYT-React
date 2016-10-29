@@ -47,6 +47,17 @@ app.get('/', function(req, res){
   res.sendFile('./public/index.html');
 })
 
+app.get('/api/saved', function(req, res){
+
+});
+
+app.post('/api/saved', function(req, res){
+
+});
+
+app.delete('/api/saved', function(req, res){
+
+});
 
 
 // Listener
