@@ -47,7 +47,7 @@ function runQuery(numResults, queryURL) {
                 articleCounter++;
 
                 // Create the HTML Well (Section) and Add the Article content for each
-                articleContent = $("<div>");
+                var articleContent = $("<div>");
                 articleContent.addClass("well");
                 $("#wellSection").append(articleContent);
 
@@ -90,8 +90,10 @@ function runQuery(numResults, queryURL) {
                 articleContent.append("<br>" + sectionName);
 
                 var saveButton = $("<button>");
-                saveButton.addClass("btn-primary");
+                saveButton.attr("type", "button");
+                saveButton.addClass("btn btn-primary");
                 saveButton.addClass("pull-right");
+                saveButton.addClass("artBtn");
                 saveButton.text("Save");               
                 articleContent.append(saveButton);
 
@@ -153,3 +155,27 @@ $('#clearAll').on('click', function() {
     articleCounter = 0;
     $("#wellSection").empty();
 })
+
+
+// Saves article
+$(document.body).on('click', '.artBtn', function(){
+
+    var articleWell = $(this).parent();
+    console.log(articleWell);
+
+
+    var articleTitle = articleWell[0].children[0].innerHTML;
+    var articleURL = articleWell[0].children[2].innerHTML;
+
+    console.log(articleTitle);
+    console.log(articleURL);
+
+})
+
+
+// // Saves article
+// $("button").click('.artBtn', function(){
+
+
+//     console.log("works")
+// })

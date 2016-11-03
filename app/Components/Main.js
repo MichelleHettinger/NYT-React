@@ -92,11 +92,11 @@ var Main = React.createClass({
 				</div>
 
 
-
+			    {/* Render search results here */}
 				<Search/>
-				
+	
 
-
+			    {/* Render saved articles here */}
 				<div className="row">
 					<div className="col-sm-12">
 						<br/>
