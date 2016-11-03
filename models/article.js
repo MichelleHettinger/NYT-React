@@ -7,10 +7,10 @@ var ArticleSchema = new Schema({
   title: {
     string: Number,
   },
-  date: {
+  url: {
   	type: String
   },
-  url: {
+  date: {
   	type: String
   }
 });

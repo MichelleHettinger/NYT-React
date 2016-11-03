@@ -163,19 +163,20 @@ $(document.body).on('click', '.artBtn', function(){
     var articleWell = $(this).parent();
     console.log(articleWell);
 
+    var articleData = {
+        title: articleWell[0].children[0].innerHTML,
+        url: articleWell[0].children[2].innerHTML,
+        date: Date.now()
+    };
 
-    var articleTitle = articleWell[0].children[0].innerHTML;
-    var articleURL = articleWell[0].children[2].innerHTML;
 
-    console.log(articleTitle);
-    console.log(articleURL);
+    console.log(articleData);
+
+    $.ajax({
+        url: '/api/saved',
+        method: "POST",
+        data: articleData
+    });
+
 
 })
-
-
-// // Saves article
-// $("button").click('.artBtn', function(){
-
-
-//     console.log("works")
-// })

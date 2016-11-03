@@ -55,7 +55,7 @@ app.get('/api/saved', function(req, res){
 });
 
 app.post('/api/saved', function(req, res){
-
+	console.log(req.body);
 });
 
 app.delete('/api/saved', function(req, res){
