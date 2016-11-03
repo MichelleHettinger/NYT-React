@@ -87,8 +87,13 @@ function runQuery(numResults, queryURL) {
 
                 articleContent.append("<a href=" + articleURL + ">" + articleURL + "</a>");
                 articleContent.append("<br>" + articleDate);
-                articleContent.append("<br>" + sectionName);                
+                articleContent.append("<br>" + sectionName);
 
+                var saveButton = $("<button>");
+                saveButton.addClass("btn-primary");
+                saveButton.addClass("pull-right");
+                saveButton.text("Save");               
+                articleContent.append(saveButton);
 
                 // Log the remaining fields to console as well
                 console.log(articleURL + "\n" + articleDate + "\n" + sectionName);

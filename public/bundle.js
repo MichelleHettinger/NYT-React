@@ -19885,13 +19885,13 @@
 									),
 									React.createElement(
 										'button',
-										{ type: 'submit', className: 'btn btn-default', id: 'runSearch' },
+										{ type: 'submit', className: 'btn btn-primary', id: 'runSearch' },
 										React.createElement('i', { className: 'fa fa-search' }),
 										' Search'
 									),
 									React.createElement(
 										'button',
-										{ type: 'button', className: 'btn btn-default', id: 'clearAll' },
+										{ type: 'button', className: 'btn btn-primary', id: 'clearAll' },
 										React.createElement('i', { className: 'fa fa-trash' }),
 										' Clear Results'
 									)
