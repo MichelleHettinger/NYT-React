@@ -10,17 +10,8 @@ var Saved = React.createClass({
 
 		return(
 
-			// This panel will initially be made up of a panel and wells for each of the articles saved -->
-			<div className="panel panel-primary">
-
-				<div className="panel-heading">
-					<h3 className="panel-title"><strong><i className="fa fa-table"></i>   Saved Articles</strong></h3>
-				</div>
-
-				<div className="panel-body" id="wellSection">
-				</div>
+			<div className="panel-body" id="savedSection">
 			</div>
-
 
 		)
 	}

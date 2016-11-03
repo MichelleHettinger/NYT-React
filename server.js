@@ -42,8 +42,16 @@ app.get('/', function(req, res){
   res.sendFile('./public/index.html');
 })
 
+// Fetch all articles user has saved to database
 app.get('/api/saved', function(req, res){
-
+	Article.find({}).exec(function(err, doc){
+		if (err){
+			console.log(err);
+		}
+		else {
+			res.send(doc);
+		}
+	})
 });
 
 app.post('/api/saved', function(req, res){
