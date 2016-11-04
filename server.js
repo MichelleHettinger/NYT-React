@@ -56,7 +56,22 @@ app.get('/api/saved', function(req, res){
 
 app.post('/api/saved', function(req, res){
 	console.log(req.body);
+	var newArticle = new Article(req.body);
+
+	console.log(res.body);
+
+	newArticle.save(function(err, doc) {
+		// send an error to the browser
+		if (err) {
+			res.send(err);
+		} 
+		// or send the doc to our browser
+		else {
+			console.log("added to database");
+		}
+	});
 });
+
 
 app.delete('/api/saved', function(req, res){
 
