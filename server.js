@@ -58,7 +58,6 @@ app.post('/api/saved', function(req, res){
 	console.log(req.body);
 	var newArticle = new Article(req.body);
 
-	console.log(res.body);
 
 	newArticle.save(function(err, doc) {
 		// send an error to the browser

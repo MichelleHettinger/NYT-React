@@ -5,6 +5,13 @@ var React = require('react');
 // Whenever you click the button it will communicate the click event to all other sub components.
 var Saved = React.createClass({
 
+	embedArticles: function(){
+		var articles = this.props.articles;
+
+		console.log(articles);
+	},
+
+
 	// Here we render the function
 	render: function(){
 

@@ -19779,17 +19779,16 @@
 		},
 
 		// This function grabs the saved articles from database and saves them to this state
-		getSaved: function getSaved() {
-			// axios.get('/api/save').then(function(results){
+		componentDidMount: function componentDidMount() {
+			axios.get('/api/saved').then(function (results) {
 
-			// 	console.log("Fetched users articles");
-			// 	console.log(results);
+				console.log("Fetched users articles");
+				console.log(results);
 
-			// 	this.setState({
-			// 		articles: results.data;
-			// 	});
-
-			// }.bind(this));
+				this.setState({
+					articles: results.data[0].articles
+				});
+			}.bind(this));
 		},
 
 		postSaved: function postSaved() {
@@ -19808,7 +19807,7 @@
 		render: function render() {
 			return React.createElement(
 				'div',
-				{ className: 'container', onload: this.getSaved },
+				{ className: 'container', onLoad: this.getSaved },
 				React.createElement(
 					'div',
 					{ className: 'jumbotron' },
@@ -21450,6 +21449,12 @@
 	var Saved = React.createClass({
 		displayName: "Saved",
 
+
+		embedArticles: function embedArticles() {
+			var articles = this.props.articles;
+
+			console.log(articles);
+		},
 
 		// Here we render the function
 		render: function render() {

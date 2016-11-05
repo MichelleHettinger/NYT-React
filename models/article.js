@@ -5,13 +5,13 @@ var Schema = mongoose.Schema;
 // Create a Schema for capturing clicks. We'll use clickID to update the same clickCounter
 var ArticleSchema = new Schema({
   title: {
-    string: Number,
+    type: String,
   },
   url: {
   	type: String
   },
   date: {
-  	type: String
+  	type: Date
   }
 });
 

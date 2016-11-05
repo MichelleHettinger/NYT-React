@@ -36,6 +36,8 @@ function runQuery(numResults, queryURL) {
             console.log("URL: " + queryURL);
             console.log("------------------------------------")
 
+
+
             // Here we then log the NYTData to console, where it will show up as an object.
             console.log(NYTData);
             console.log("------------------------------------")
@@ -119,7 +121,7 @@ $('#runSearch').on('click', function() {
 
     // Search Term
     var searchTerm = $("#searchTerm").val().toString();
-    console.log(searchTerm);
+    console.log("User searched for: " + searchTerm);
     queryTerm = queryURLBase + searchTerm;
 
     // Num Results

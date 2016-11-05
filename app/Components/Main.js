@@ -20,17 +20,17 @@ var Main = React.createClass({
 
 
 	// This function grabs the saved articles from database and saves them to this state
-	getSaved: function(){
-		// axios.get('/api/save').then(function(results){
+	componentDidMount: function(){
+		axios.get('/api/saved').then(function(results){
 
-		// 	console.log("Fetched users articles");
-		// 	console.log(results);
+			console.log("Fetched users articles");
+			console.log(results);
 
-		// 	this.setState({
-		// 		articles: results.data;
-		// 	});
+			this.setState({
+				articles: results.data[0].articles
+			});
 
-		// }.bind(this));
+		}.bind(this));
 	},
 
 	postSaved: function(){
@@ -50,7 +50,7 @@ var Main = React.createClass({
 	render: function(){
 		return(
 
-			<div className="container" onload={this.getSaved}>
+			<div className="container" onLoad={this.getSaved}>
 
 				<div className="jumbotron">
 					<h1 className="text-center"><strong><i className="fa fa-newspaper-o"></i> New York Times Search</strong></h1>
@@ -106,7 +106,7 @@ var Main = React.createClass({
 							</div>
 
 
-						<Saved articles={this.state.articles}/>
+							<Saved articles={this.state.articles}/>
 
 
 						</div>
