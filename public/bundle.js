@@ -19774,7 +19774,6 @@
 		getInitialState: function getInitialState() {
 			return {
 				articles: null
-
 			};
 		},
 
@@ -19783,31 +19782,19 @@
 			axios.get('/api/saved').then(function (results) {
 
 				console.log("Fetched users articles");
-				console.log(results);
+				console.log(results.data);
 
 				this.setState({
-					articles: results.data[0].articles
+					articles: results.data
 				});
 			}.bind(this));
-		},
-
-		postSaved: function postSaved() {
-			axios.post('/api/save', {}).then(function (results) {
-				console.log("Saved article to favorites");
-			});
-		},
-
-		deleteSaved: function deleteSaved() {
-			axios.delete('/api/save', {}).then(function (results) {
-				console.log("Article removed from favorites");
-			});
 		},
 
 		// Here we render the entire contents of the app
 		render: function render() {
 			return React.createElement(
 				'div',
-				{ className: 'container', onLoad: this.getSaved },
+				{ className: 'container', onLoad: this.componentDidMount },
 				React.createElement(
 					'div',
 					{ className: 'jumbotron' },
@@ -19900,34 +19887,7 @@
 					)
 				),
 				React.createElement(Search, null),
-				React.createElement(
-					'div',
-					{ className: 'row' },
-					React.createElement(
-						'div',
-						{ className: 'col-sm-12' },
-						React.createElement('br', null),
-						React.createElement(
-							'div',
-							{ className: 'panel panel-primary' },
-							React.createElement(
-								'div',
-								{ className: 'panel-heading' },
-								React.createElement(
-									'h3',
-									{ className: 'panel-title' },
-									React.createElement(
-										'strong',
-										null,
-										React.createElement('i', { className: 'fa fa-table' }),
-										'   Saved Articles'
-									)
-								)
-							),
-							React.createElement(Saved, { articles: this.state.articles })
-						)
-					)
-				),
+				React.createElement(Saved, { articles: this.state.articles }),
 				React.createElement(
 					'div',
 					{ className: 'row' },
@@ -21450,16 +21410,70 @@
 		displayName: "Saved",
 
 
-		embedArticles: function embedArticles() {
-			var articles = this.props.articles;
+		getInitialState: function getInitialState() {
+			return {
+				articles: this.props.articles
+			};
+		},
 
-			console.log(articles);
+		embedArticles: function embedArticles() {
+
+			console.log("Embedding articles.");
+
+			var allArticles = this.state.articles;
+
+			// for (var i=0; i<allArticles.length; i++){
+
+			mapObject(allArticles[0], function (key, value) {
+				return React.createElement(
+					"div",
+					null,
+					" ",
+					key,
+					" ",
+					value,
+					" "
+				);
+			});
+			// }
 		},
 
 		// Here we render the function
 		render: function render() {
 
-			return React.createElement("div", { className: "panel-body", id: "savedSection" });
+			return React.createElement(
+				"div",
+				{ className: "row" },
+				React.createElement(
+					"div",
+					{ className: "col-sm-12" },
+					React.createElement("br", null),
+					React.createElement(
+						"div",
+						{ className: "panel panel-primary" },
+						React.createElement(
+							"div",
+							{ className: "panel-heading" },
+							React.createElement(
+								"h3",
+								{ className: "panel-title" },
+								React.createElement(
+									"strong",
+									null,
+									React.createElement("i", { className: "fa fa-table" }),
+									"   Saved Articles"
+								)
+							)
+						),
+						React.createElement(
+							"div",
+							{ className: "panel-body", id: "savedSection", onLoad: this.embedArticles },
+							this.state.articles,
+							this.embedArticles
+						)
+					)
+				)
+			);
 		}
 	});
 

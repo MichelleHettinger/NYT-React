@@ -14,9 +14,9 @@ var Main = React.createClass({
 	getInitialState: function(){
 		return {
 			articles: null,
-
 		}
 	},
+
 
 
 	// This function grabs the saved articles from database and saves them to this state
@@ -24,25 +24,13 @@ var Main = React.createClass({
 		axios.get('/api/saved').then(function(results){
 
 			console.log("Fetched users articles");
-			console.log(results);
+			console.log(results.data);
 
 			this.setState({
-				articles: results.data[0].articles
+				articles: results.data
 			});
 
 		}.bind(this));
-	},
-
-	postSaved: function(){
-		axios.post('/api/save', {}).then(function(results){
-			console.log("Saved article to favorites")
-		})
-	},
-
-	deleteSaved: function(){
-		axios.delete('/api/save', {}).then(function(results){
-			console.log("Article removed from favorites")
-		})
 	},
 
 
@@ -50,7 +38,7 @@ var Main = React.createClass({
 	render: function(){
 		return(
 
-			<div className="container" onLoad={this.getSaved}>
+			<div className="container" onLoad={this.componentDidMount}>
 
 				<div className="jumbotron">
 					<h1 className="text-center"><strong><i className="fa fa-newspaper-o"></i> New York Times Search</strong></h1>
@@ -97,23 +85,7 @@ var Main = React.createClass({
 	
 
 			    {/* Render saved articles here */}
-				<div className="row">
-					<div className="col-sm-12">
-						<br/>
-						<div className="panel panel-primary">
-							<div className="panel-heading">
-								<h3 className="panel-title"><strong><i className="fa fa-table"></i>   Saved Articles</strong></h3>
-							</div>
-
-
-							<Saved articles={this.state.articles}/>
-
-
-						</div>
-					</div>
-				</div>
-
-
+				<Saved articles={this.state.articles}/>
 
 
 				<div className="row">
