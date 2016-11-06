@@ -5,50 +5,63 @@ var React = require('react');
 // Whenever you click the button it will communicate the click event to all other sub components.
 var Saved = React.createClass({
 
-	getInitialState: function(){
-		return {
-			articles: this.props.articles,
-		}
-	},
-
-	embedArticles: function(){
-
-		console.log("Embedding articles.");
-
-		var allArticles = this.state.articles;
-
-		// for (var i=0; i<allArticles.length; i++){
-
-			mapObject(allArticles[0], function(key, value){
-				return <div> {key} {value} </div>
-			});
-		// }
-	},
-
 	// Here we render the function
 	render: function(){
 
-		return(
-			<div className="row">
-				<div className="col-sm-12">
-					<br/>
-					<div className="panel panel-primary">
-						<div className="panel-heading">
-							<h3 className="panel-title"><strong><i className="fa fa-table"></i>   Saved Articles</strong></h3>
-						</div>
+		console.log("Rendering");
 
-						<div className="panel-body" id="savedSection" onLoad={this.embedArticles}>
+		if (!this.props.articles) {
+			console.log("Not loaded yet");
 
-						{this.state.articles}
-						{this.embedArticles}
-						</div>
+			var ok = "ok"
 
+			return (
+				<h3>Save an article {ok}</h3>
+			)
+		}
+		else {
+			var articles = this.props.articles;
+			var title;
+			var url;
+			var date;
 
+			//Mapping the array of articles breaks the array into its individual objects.
+			articles.map(function(article, i){
+
+				console.log(article);
+
+				//Then we get the values for every key in the object and turn it into an array of those values
+				var rawValues = Object.values(article);
+				console.log(rawValues);
+
+				//Since we only want title, url and date
+				title = rawValues[1];
+				url = rawValues[2];
+				date = rawValues[3];
+
+				var artValues = [title, url, date];
+
+				console.log(title);
+
+				return(
+					<div className="well">
+						<li>
+						    
+						<h3>
+						    <span><em>{article.title}</em></span>
+
+						    <span className="btn-group pull-right">
+						        <a href={article.url} target="_blank"><button className="btn btn-default">View Article</button></a>
+						    </span> 
+						</h3>
+
+						<p>Date Published: {article.date}</p>
+
+						</li>
 					</div>
-				</div>
-			</div>	
-
-		)
+				);		
+			}.bind(this))
+		}
 	}
 });
 

@@ -19887,7 +19887,38 @@
 					)
 				),
 				React.createElement(Search, null),
-				React.createElement(Saved, { articles: this.state.articles }),
+				React.createElement(
+					'div',
+					{ className: 'row' },
+					React.createElement(
+						'div',
+						{ className: 'col-sm-12' },
+						React.createElement('br', null),
+						React.createElement(
+							'div',
+							{ className: 'panel panel-primary' },
+							React.createElement(
+								'div',
+								{ className: 'panel-heading' },
+								React.createElement(
+									'h3',
+									{ className: 'panel-title' },
+									React.createElement(
+										'strong',
+										null,
+										React.createElement('i', { className: 'fa fa-table' }),
+										'   Saved Articles'
+									)
+								)
+							),
+							React.createElement(
+								'div',
+								{ className: 'panel-body', id: 'savedSection' },
+								React.createElement(Saved, { articles: this.state.articles })
+							)
+						)
+					)
+				),
 				React.createElement(
 					'div',
 					{ className: 'row' },
@@ -21410,70 +21441,88 @@
 		displayName: "Saved",
 
 
-		getInitialState: function getInitialState() {
-			return {
-				articles: this.props.articles
-			};
-		},
-
-		embedArticles: function embedArticles() {
-
-			console.log("Embedding articles.");
-
-			var allArticles = this.state.articles;
-
-			// for (var i=0; i<allArticles.length; i++){
-
-			mapObject(allArticles[0], function (key, value) {
-				return React.createElement(
-					"div",
-					null,
-					" ",
-					key,
-					" ",
-					value,
-					" "
-				);
-			});
-			// }
-		},
-
 		// Here we render the function
 		render: function render() {
 
-			return React.createElement(
-				"div",
-				{ className: "row" },
-				React.createElement(
-					"div",
-					{ className: "col-sm-12" },
-					React.createElement("br", null),
-					React.createElement(
+			console.log("Rendering");
+
+			if (!this.props.articles) {
+				console.log("Not loaded yet");
+
+				var ok = "ok";
+
+				return React.createElement(
+					"h3",
+					null,
+					"Save an article ",
+					ok
+				);
+			} else {
+				var articles = this.props.articles;
+				var title;
+				var url;
+				var date;
+
+				//Mapping the array of articles breaks the array into its individual objects.
+				articles.map(function (article, i) {
+
+					console.log(article);
+
+					//Then we get the values for every key in the object and turn it into an array of those values
+					var rawValues = Object.values(article);
+					console.log(rawValues);
+
+					//Since we only want title, url and date
+					title = rawValues[1];
+					url = rawValues[2];
+					date = rawValues[3];
+
+					var artValues = [title, url, date];
+
+					console.log(title);
+
+					return React.createElement(
 						"div",
-						{ className: "panel panel-primary" },
+						{ className: "well" },
 						React.createElement(
-							"div",
-							{ className: "panel-heading" },
+							"li",
+							null,
 							React.createElement(
 								"h3",
-								{ className: "panel-title" },
+								null,
 								React.createElement(
-									"strong",
+									"span",
 									null,
-									React.createElement("i", { className: "fa fa-table" }),
-									"   Saved Articles"
+									React.createElement(
+										"em",
+										null,
+										article.title
+									)
+								),
+								React.createElement(
+									"span",
+									{ className: "btn-group pull-right" },
+									React.createElement(
+										"a",
+										{ href: article.url, target: "_blank" },
+										React.createElement(
+											"button",
+											{ className: "btn btn-default" },
+											"View Article"
+										)
+									)
 								)
+							),
+							React.createElement(
+								"p",
+								null,
+								"Date Published: ",
+								article.date
 							)
-						),
-						React.createElement(
-							"div",
-							{ className: "panel-body", id: "savedSection", onLoad: this.embedArticles },
-							this.state.articles,
-							this.embedArticles
 						)
-					)
-				)
-			);
+					);
+				}.bind(this));
+			}
 		}
 	});
 

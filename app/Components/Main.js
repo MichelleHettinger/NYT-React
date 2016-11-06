@@ -13,7 +13,7 @@ var Main = React.createClass({
 	// Here we set a generic state associated with the saved articles
 	getInitialState: function(){
 		return {
-			articles: null,
+			articles: null
 		}
 	},
 
@@ -82,10 +82,24 @@ var Main = React.createClass({
 
 			    {/* Render search results here */}
 				<Search/>
-	
 
-			    {/* Render saved articles here */}
-				<Saved articles={this.state.articles}/>
+				{/* Render saved articles here */}
+				<div className="row">
+					<div className="col-sm-12">
+						<br/>
+						<div className="panel panel-primary">
+							<div className="panel-heading">
+								<h3 className="panel-title"><strong><i className="fa fa-table"></i>   Saved Articles</strong></h3>
+							</div>
+							<div className="panel-body" id="savedSection">
+
+								<Saved articles={this.state.articles}/>
+
+							</div>
+						</div>
+					</div>
+				</div>	
+
 
 
 				<div className="row">
