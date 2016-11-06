@@ -19758,24 +19758,17 @@
 
 	// Include React and axios
 	var React = __webpack_require__(1);
-	var axios = __webpack_require__(160);
+	var axios = __webpack_require__(162);
 
 	// Here we include all of the sub-components
-	var Saved = __webpack_require__(185);
-	var Search = __webpack_require__(186);
+	var Saved = __webpack_require__(160);
+	var Search = __webpack_require__(161);
 
 	// This is the main component. It includes the banner and button.
 	// Whenever you click the button it will communicate the click event to all other sub components.
 	var Main = React.createClass({
 		displayName: 'Main',
 
-
-		// Here we set a generic state associated with the saved articles
-		getInitialState: function getInitialState() {
-			return {
-				articles: null
-			};
-		},
 
 		// This function grabs the saved articles from database and saves them to this state
 		componentDidMount: function componentDidMount() {
@@ -19794,7 +19787,7 @@
 		render: function render() {
 			return React.createElement(
 				'div',
-				{ className: 'container', onLoad: this.componentDidMount },
+				{ className: 'container' },
 				React.createElement(
 					'div',
 					{ className: 'jumbotron' },
@@ -19887,38 +19880,7 @@
 					)
 				),
 				React.createElement(Search, null),
-				React.createElement(
-					'div',
-					{ className: 'row' },
-					React.createElement(
-						'div',
-						{ className: 'col-sm-12' },
-						React.createElement('br', null),
-						React.createElement(
-							'div',
-							{ className: 'panel panel-primary' },
-							React.createElement(
-								'div',
-								{ className: 'panel-heading' },
-								React.createElement(
-									'h3',
-									{ className: 'panel-title' },
-									React.createElement(
-										'strong',
-										null,
-										React.createElement('i', { className: 'fa fa-table' }),
-										'   Saved Articles'
-									)
-								)
-							),
-							React.createElement(
-								'div',
-								{ className: 'panel-body', id: 'savedSection' },
-								React.createElement(Saved, { articles: this.state.articles })
-							)
-						)
-					)
-				),
+				React.createElement(Saved, null),
 				React.createElement(
 					'div',
 					{ className: 'row' },
@@ -19949,17 +19911,242 @@
 /* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(161);
+	'use strict';
+
+	// Include React 
+	var React = __webpack_require__(1);
+	var axios = __webpack_require__(162);
+
+	// This is the main component. It includes the banner and button.
+	// Whenever you click the button it will communicate the click event to all other sub components.
+	var Saved = React.createClass({
+		displayName: 'Saved',
+
+
+		// Here we set a generic state associated with the saved articles
+		getInitialState: function getInitialState() {
+			return {
+				articles: ""
+			};
+		},
+
+		// This function grabs the saved articles from database and saves them to this state
+		componentDidMount: function componentDidMount() {
+			axios.get('/api/saved').then(function (results) {
+
+				console.log("Fetched users articles");
+				console.log(results.data);
+
+				this.setState({
+					articles: results.data
+				});
+			}.bind(this));
+		},
+
+		deleteSaved: function deleteSaved(article) {
+
+			console.log("Deleting: " + article._id);
+
+			var artID = article._id;
+
+			axios.delete('/api/saved', {
+				params: {
+					'id': article._id
+				}
+			}).then(function (data) {
+
+				axios.get('/api/saved').then(function (results) {
+
+					console.log("Fetched users articles");
+					console.log(results.data);
+
+					if (results.data) {
+
+						this.setState({
+							articles: results.data
+						});
+					} else {
+						this.setState({
+							articles: null
+						});
+					}
+				}.bind(this));
+			}.bind(this));
+		},
+
+		// Here we render the function
+		render: function render() {
+
+			if (!this.state.articles) {
+				console.log("Not loaded yet");
+
+				var ok = "ok";
+
+				return React.createElement(
+					'h3',
+					null,
+					'Save an article ',
+					ok
+				);
+			} else {
+
+				//Mapping the array of articles breaks the array into its individual objects.
+				var articles = this.state.articles.map(function (article, i) {
+
+					return React.createElement(
+						'div',
+						{ className: 'well', key: i },
+						React.createElement(
+							'li',
+							null,
+							React.createElement(
+								'h3',
+								null,
+								React.createElement(
+									'span',
+									null,
+									React.createElement(
+										'em',
+										null,
+										article.title
+									)
+								),
+								React.createElement(
+									'span',
+									{ className: 'btn-group pull-right' },
+									React.createElement(
+										'a',
+										{ href: article.url, target: '_blank' },
+										React.createElement(
+											'button',
+											{ className: 'btn btn-default ' },
+											'View Article'
+										)
+									),
+									React.createElement(
+										'button',
+										{ className: 'btn btn-primary', onClick: this.deleteSaved.bind(this, article) },
+										'Delete'
+									)
+								)
+							),
+							React.createElement(
+								'p',
+								null,
+								'Date Published: ',
+								article.date
+							)
+						)
+					);
+				}.bind(this));
+			}
+
+			return React.createElement(
+				'div',
+				{ className: 'row', onLoad: this.componentDidMount },
+				React.createElement(
+					'div',
+					{ className: 'col-sm-12' },
+					React.createElement('br', null),
+					React.createElement(
+						'div',
+						{ className: 'panel panel-primary' },
+						React.createElement(
+							'div',
+							{ className: 'panel-heading' },
+							React.createElement(
+								'h2',
+								{ className: 'panel-title' },
+								React.createElement('i', { className: 'fa fa-table' }),
+								'   Saved Articles'
+							)
+						),
+						React.createElement(
+							'div',
+							{ className: 'panel-body', id: 'savedSection' },
+							React.createElement(
+								'ul',
+								null,
+								articles
+							)
+						)
+					)
+				)
+			);
+		}
+
+	});
+
+	// Export the component back for use in other files
+	module.exports = Saved;
 
 /***/ },
 /* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+
+	// Include React 
+	var React = __webpack_require__(1);
+
+	// This is the main component. It includes the banner and button.
+	// Whenever you click the button it will communicate the click event to all other sub components.
+	var Search = React.createClass({
+		displayName: "Search",
+
+
+		// Here we render the function
+		render: function render() {
+
+			return React.createElement(
+				"div",
+				{ className: "row" },
+				React.createElement(
+					"div",
+					{ className: "col-sm-12" },
+					React.createElement("br", null),
+					React.createElement(
+						"div",
+						{ className: "panel panel-primary" },
+						React.createElement(
+							"div",
+							{ className: "panel-heading" },
+							React.createElement(
+								"h3",
+								{ className: "panel-title" },
+								React.createElement(
+									"strong",
+									null,
+									React.createElement("i", { className: "fa fa-table" }),
+									"   Top Articles"
+								)
+							)
+						),
+						React.createElement("div", { className: "panel-body", id: "wellSection" })
+					)
+				)
+			);
+		}
+	});
+
+	// Export the component back for use in other files
+	module.exports = Search;
+
+/***/ },
+/* 162 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(163);
+
+/***/ },
+/* 163 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 
-	var utils = __webpack_require__(162);
-	var bind = __webpack_require__(163);
-	var Axios = __webpack_require__(164);
+	var utils = __webpack_require__(164);
+	var bind = __webpack_require__(165);
+	var Axios = __webpack_require__(166);
 
 	/**
 	 * Create an instance of Axios
@@ -19992,15 +20179,15 @@
 	};
 
 	// Expose Cancel & CancelToken
-	axios.Cancel = __webpack_require__(182);
-	axios.CancelToken = __webpack_require__(183);
-	axios.isCancel = __webpack_require__(179);
+	axios.Cancel = __webpack_require__(184);
+	axios.CancelToken = __webpack_require__(185);
+	axios.isCancel = __webpack_require__(181);
 
 	// Expose all/spread
 	axios.all = function all(promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(184);
+	axios.spread = __webpack_require__(186);
 
 	module.exports = axios;
 
@@ -20009,12 +20196,12 @@
 
 
 /***/ },
-/* 162 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var bind = __webpack_require__(163);
+	var bind = __webpack_require__(165);
 
 	/*global toString:true*/
 
@@ -20314,7 +20501,7 @@
 
 
 /***/ },
-/* 163 */
+/* 165 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -20331,17 +20518,17 @@
 
 
 /***/ },
-/* 164 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var defaults = __webpack_require__(165);
-	var utils = __webpack_require__(162);
-	var InterceptorManager = __webpack_require__(176);
-	var dispatchRequest = __webpack_require__(177);
-	var isAbsoluteURL = __webpack_require__(180);
-	var combineURLs = __webpack_require__(181);
+	var defaults = __webpack_require__(167);
+	var utils = __webpack_require__(164);
+	var InterceptorManager = __webpack_require__(178);
+	var dispatchRequest = __webpack_require__(179);
+	var isAbsoluteURL = __webpack_require__(182);
+	var combineURLs = __webpack_require__(183);
 
 	/**
 	 * Create a new instance of Axios
@@ -20422,13 +20609,13 @@
 
 
 /***/ },
-/* 165 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(162);
-	var normalizeHeaderName = __webpack_require__(166);
+	var utils = __webpack_require__(164);
+	var normalizeHeaderName = __webpack_require__(168);
 
 	var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 	var DEFAULT_CONTENT_TYPE = {
@@ -20445,10 +20632,10 @@
 	  var adapter;
 	  if (typeof XMLHttpRequest !== 'undefined') {
 	    // For browsers use XHR adapter
-	    adapter = __webpack_require__(167);
+	    adapter = __webpack_require__(169);
 	  } else if (typeof process !== 'undefined') {
 	    // For node use HTTP adapter
-	    adapter = __webpack_require__(167);
+	    adapter = __webpack_require__(169);
 	  }
 	  return adapter;
 	}
@@ -20515,12 +20702,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 166 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(162);
+	var utils = __webpack_require__(164);
 
 	module.exports = function normalizeHeaderName(headers, normalizedName) {
 	  utils.forEach(headers, function processHeader(value, name) {
@@ -20533,18 +20720,18 @@
 
 
 /***/ },
-/* 167 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(162);
-	var settle = __webpack_require__(168);
-	var buildURL = __webpack_require__(171);
-	var parseHeaders = __webpack_require__(172);
-	var isURLSameOrigin = __webpack_require__(173);
-	var createError = __webpack_require__(169);
-	var btoa = (typeof window !== 'undefined' && window.btoa) || __webpack_require__(174);
+	var utils = __webpack_require__(164);
+	var settle = __webpack_require__(170);
+	var buildURL = __webpack_require__(173);
+	var parseHeaders = __webpack_require__(174);
+	var isURLSameOrigin = __webpack_require__(175);
+	var createError = __webpack_require__(171);
+	var btoa = (typeof window !== 'undefined' && window.btoa) || __webpack_require__(176);
 
 	module.exports = function xhrAdapter(config) {
 	  return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -20640,7 +20827,7 @@
 	    // This is only done if running in a standard browser environment.
 	    // Specifically not if we're in a web worker, or react-native.
 	    if (utils.isStandardBrowserEnv()) {
-	      var cookies = __webpack_require__(175);
+	      var cookies = __webpack_require__(177);
 
 	      // Add xsrf header
 	      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -20717,12 +20904,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 168 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var createError = __webpack_require__(169);
+	var createError = __webpack_require__(171);
 
 	/**
 	 * Resolve or reject a Promise based on response status.
@@ -20748,12 +20935,12 @@
 
 
 /***/ },
-/* 169 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var enhanceError = __webpack_require__(170);
+	var enhanceError = __webpack_require__(172);
 
 	/**
 	 * Create an Error with the specified message, config, error code, and response.
@@ -20771,7 +20958,7 @@
 
 
 /***/ },
-/* 170 */
+/* 172 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -20796,12 +20983,12 @@
 
 
 /***/ },
-/* 171 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(162);
+	var utils = __webpack_require__(164);
 
 	function encode(val) {
 	  return encodeURIComponent(val).
@@ -20870,12 +21057,12 @@
 
 
 /***/ },
-/* 172 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(162);
+	var utils = __webpack_require__(164);
 
 	/**
 	 * Parse headers into an object
@@ -20913,12 +21100,12 @@
 
 
 /***/ },
-/* 173 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(162);
+	var utils = __webpack_require__(164);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -20987,7 +21174,7 @@
 
 
 /***/ },
-/* 174 */
+/* 176 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -21029,12 +21216,12 @@
 
 
 /***/ },
-/* 175 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(162);
+	var utils = __webpack_require__(164);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -21088,12 +21275,12 @@
 
 
 /***/ },
-/* 176 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(162);
+	var utils = __webpack_require__(164);
 
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -21146,15 +21333,15 @@
 
 
 /***/ },
-/* 177 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(162);
-	var transformData = __webpack_require__(178);
-	var isCancel = __webpack_require__(179);
-	var defaults = __webpack_require__(165);
+	var utils = __webpack_require__(164);
+	var transformData = __webpack_require__(180);
+	var isCancel = __webpack_require__(181);
+	var defaults = __webpack_require__(167);
 
 	/**
 	 * Throws a `Cancel` if cancellation has been requested.
@@ -21231,12 +21418,12 @@
 
 
 /***/ },
-/* 178 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(162);
+	var utils = __webpack_require__(164);
 
 	/**
 	 * Transform the data for a request or a response
@@ -21257,7 +21444,7 @@
 
 
 /***/ },
-/* 179 */
+/* 181 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -21268,7 +21455,7 @@
 
 
 /***/ },
-/* 180 */
+/* 182 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -21288,7 +21475,7 @@
 
 
 /***/ },
-/* 181 */
+/* 183 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -21306,7 +21493,7 @@
 
 
 /***/ },
-/* 182 */
+/* 184 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -21331,12 +21518,12 @@
 
 
 /***/ },
-/* 183 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Cancel = __webpack_require__(182);
+	var Cancel = __webpack_require__(184);
 
 	/**
 	 * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -21394,7 +21581,7 @@
 
 
 /***/ },
-/* 184 */
+/* 186 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -21425,161 +21612,6 @@
 	  };
 	};
 
-
-/***/ },
-/* 185 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	// Include React 
-	var React = __webpack_require__(1);
-
-	// This is the main component. It includes the banner and button.
-	// Whenever you click the button it will communicate the click event to all other sub components.
-	var Saved = React.createClass({
-		displayName: "Saved",
-
-
-		// Here we render the function
-		render: function render() {
-
-			console.log("Rendering");
-
-			if (!this.props.articles) {
-				console.log("Not loaded yet");
-
-				var ok = "ok";
-
-				return React.createElement(
-					"h3",
-					null,
-					"Save an article ",
-					ok
-				);
-			} else {
-				var articles = this.props.articles;
-				var title;
-				var url;
-				var date;
-
-				//Mapping the array of articles breaks the array into its individual objects.
-				articles.map(function (article, i) {
-
-					console.log(article);
-
-					//Then we get the values for every key in the object and turn it into an array of those values
-					var rawValues = Object.values(article);
-					console.log(rawValues);
-
-					//Since we only want title, url and date
-					title = rawValues[1];
-					url = rawValues[2];
-					date = rawValues[3];
-
-					var artValues = [title, url, date];
-
-					console.log(title);
-
-					return React.createElement(
-						"div",
-						{ className: "well" },
-						React.createElement(
-							"li",
-							null,
-							React.createElement(
-								"h3",
-								null,
-								React.createElement(
-									"span",
-									null,
-									React.createElement(
-										"em",
-										null,
-										article.title
-									)
-								),
-								React.createElement(
-									"span",
-									{ className: "btn-group pull-right" },
-									React.createElement(
-										"a",
-										{ href: article.url, target: "_blank" },
-										React.createElement(
-											"button",
-											{ className: "btn btn-default" },
-											"View Article"
-										)
-									)
-								)
-							),
-							React.createElement(
-								"p",
-								null,
-								"Date Published: ",
-								article.date
-							)
-						)
-					);
-				}.bind(this));
-			}
-		}
-	});
-
-	// Export the component back for use in other files
-	module.exports = Saved;
-
-/***/ },
-/* 186 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	// Include React 
-	var React = __webpack_require__(1);
-
-	// This is the main component. It includes the banner and button.
-	// Whenever you click the button it will communicate the click event to all other sub components.
-	var Search = React.createClass({
-		displayName: "Search",
-
-
-		// Here we render the function
-		render: function render() {
-
-			return React.createElement(
-				"div",
-				{ className: "row" },
-				React.createElement(
-					"div",
-					{ className: "col-sm-12" },
-					React.createElement("br", null),
-					React.createElement(
-						"div",
-						{ className: "panel panel-primary" },
-						React.createElement(
-							"div",
-							{ className: "panel-heading" },
-							React.createElement(
-								"h3",
-								{ className: "panel-title" },
-								React.createElement(
-									"strong",
-									null,
-									React.createElement("i", { className: "fa fa-table" }),
-									"   Top Articles"
-								)
-							)
-						),
-						React.createElement("div", { className: "panel-body", id: "wellSection" })
-					)
-				)
-			);
-		}
-	});
-
-	// Export the component back for use in other files
-	module.exports = Search;
 
 /***/ }
 /******/ ]);

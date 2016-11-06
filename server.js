@@ -34,7 +34,6 @@ db.once('open', function () {
   console.log('Mongoose connection successful.');
 });
 
-
 // -------------------------------------------------
 
 // Main Route. This route will redirect to our rendered React application
@@ -68,11 +67,24 @@ app.post('/api/saved', function(req, res){
 		else {
 			console.log("added to database");
 		}
-	});
+	})
+	
 });
 
 
 app.delete('/api/saved', function(req, res){
+
+	var id = req.param('id');
+	console.log("Deleting: " + id);
+
+	Article.find({"_id": id}).remove().exec(function(err, data){
+		if(err){
+			console.log(err);
+		}
+		else {
+			res.send("Deleted");
+		}
+	});
 
 });
 

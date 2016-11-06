@@ -5,14 +5,10 @@ var React = require('react');
 // Whenever you click the button it will communicate the click event to all other sub components.
 var Search = React.createClass({
 
-
-
-
 	// Here we render the function
 	render: function(){
 
-		return(
-
+		return (
 			<div className="row">
 				<div className="col-sm-12">
 					<br/>
@@ -20,14 +16,11 @@ var Search = React.createClass({
 						<div className="panel-heading">
 							<h3 className="panel-title"><strong><i className="fa fa-table"></i>   Top Articles</strong></h3>
 						</div>
-
 						<div className="panel-body" id="wellSection">
 						</div>
-
 					</div>
 				</div>
-			</div>		
-
+			</div>					
 		)
 	}
 });

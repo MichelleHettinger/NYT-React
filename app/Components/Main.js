@@ -10,15 +10,6 @@ var Search = require('./Search.js');
 // Whenever you click the button it will communicate the click event to all other sub components.
 var Main = React.createClass({
 
-	// Here we set a generic state associated with the saved articles
-	getInitialState: function(){
-		return {
-			articles: null
-		}
-	},
-
-
-
 	// This function grabs the saved articles from database and saves them to this state
 	componentDidMount: function(){
 		axios.get('/api/saved').then(function(results){
@@ -33,12 +24,11 @@ var Main = React.createClass({
 		}.bind(this));
 	},
 
-
 	// Here we render the entire contents of the app
 	render: function(){
 		return(
 
-			<div className="container" onLoad={this.componentDidMount}>
+			<div className="container">
 
 				<div className="jumbotron">
 					<h1 className="text-center"><strong><i className="fa fa-newspaper-o"></i> New York Times Search</strong></h1>
@@ -79,27 +69,11 @@ var Main = React.createClass({
 					</div>
 				</div>
 
-
 			    {/* Render search results here */}
 				<Search/>
 
 				{/* Render saved articles here */}
-				<div className="row">
-					<div className="col-sm-12">
-						<br/>
-						<div className="panel panel-primary">
-							<div className="panel-heading">
-								<h3 className="panel-title"><strong><i className="fa fa-table"></i>   Saved Articles</strong></h3>
-							</div>
-							<div className="panel-body" id="savedSection">
-
-								<Saved articles={this.state.articles}/>
-
-							</div>
-						</div>
-					</div>
-				</div>	
-
+				<Saved />
 
 
 				<div className="row">
