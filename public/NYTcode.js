@@ -181,4 +181,8 @@ $(document.body).on('click', '.artBtn', function(){
     });
 
 
+    $(this).text("Saved");
+    $(this).removeClass("btn-primary");
+    $(this).addClass("btn-success");
+
 })
